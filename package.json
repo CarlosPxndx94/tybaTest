@@ -22,6 +22,7 @@
     "verify": "docker-compose up -d && npm run lint && npm run test:cov && npm run test:e2e && ts-node ./merge-coverage.ts --report coverage/unit/coverage-final.json --report coverage/e2e/coverage-final.json && docker-compose down -v"
   },
   "dependencies": {
+    "@nestjs/axios": "0.0.7",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.0.0",
