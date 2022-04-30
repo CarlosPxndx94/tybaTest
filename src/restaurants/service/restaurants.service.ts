@@ -13,7 +13,7 @@ export class RestaurantsService {
       .get(
         'https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+' +
           ciudad +
-          '&radius=2000&key=AIzaSyDjgRu_79hF30QmVPLEdLg_Gzcsyl7M1nM',
+          '&radius=2000&key=XXX',
       )
       .pipe(map((response) => response.data['results']));
   }
