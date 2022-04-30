@@ -16,32 +16,49 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest --coverage --passWithNoTests",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand --detectOpenHandles --coverage",
+    "verify": "docker-compose up -d && npm run lint && npm run test:cov && npm run test:e2e && ts-node ./merge-coverage.ts --report coverage/unit/coverage-final.json --report coverage/e2e/coverage-final.json && docker-compose down -v"
+    
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/jwt": "^8.0.0",
+    "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.2.1",
+    "@nestjs/typeorm": "^8.0.3",
+    "bcrypt": "^5.0.1",
     "class-validator": "^0.13.2",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "swagger-ui-express": "^4.3.0",
+    "typeorm": "^0.3.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "27.4.1",
     "@types/node": "^16.0.0",
+    "@types/passport-jwt": "^3.0.6",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "fs-extra": "^10.1.0",
+    "istanbul-api": "^3.0.0",
     "jest": "^27.2.5",
     "prettier": "^2.3.2",
     "run-script-webpack-plugin": "0.0.11",
@@ -63,14 +80,22 @@
       "ts"
     ],
     "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "html"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "../coverage/unit",
+    "coveragePathIgnorePatterns": [
+      ".module.ts$",
+      ".spec.ts$",
+      "src/main.ts"
+    ],
     "testEnvironment": "node"
   }
 }

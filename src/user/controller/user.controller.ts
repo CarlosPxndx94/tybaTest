@@ -1,18 +1,44 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UserDto } from '../dto/user.dto';
-import { UserService } from '../service/user/user.service';
+import { UserService } from '../service/user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private usersService: UserService) {}
 
-  @Post('/')
-  create(@Body() user: UserDto): UserDto {
-    return this.userService.create(user);
+  @Get()
+  async getAllUsers(): Promise<UserDto[]> {
+    return await this.usersService.getAllUsers();
   }
 
-  @Get('/')
-  findAll(): UserDto[] {
-    return this.userService.findAll();
+  @Get(':id')
+  async getUserById(@Param('id') id: string): Promise<UserDto> {
+    return await this.usersService.getUserById(id);
+  }
+
+  @Post()
+  async newUser(@Body() user: UserDto): Promise<UserDto> {
+    return await this.usersService.newUser(user);
+  }
+
+  @Put(':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() user: UserDto,
+  ): Promise<UserDto> {
+    return await this.usersService.updateUser(id, user);
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string): Promise<void> {
+    return await this.usersService.deleteUser(id);
   }
 }
