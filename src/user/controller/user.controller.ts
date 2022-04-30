@@ -6,7 +6,11 @@ import {
   Param,
   Post,
   Put,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
 
@@ -19,8 +23,11 @@ export class UserController {
     return await this.usersService.getAllUsers();
   }
 
-  @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<UserDto> {
+  @Get('/me')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async getUserById(@Request() req: any): Promise<UserDto> {
+    const { id } = req.user;
     return await this.usersService.getUserById(id);
   }
 
@@ -37,6 +44,8 @@ export class UserController {
     return await this.usersService.updateUser(id, user);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<void> {
     return await this.usersService.deleteUser(id);

@@ -34,4 +34,9 @@ export class UserService {
   async deleteUser(id: string): Promise<void> {
     await this.usersRepository.deleteUser(id);
   }
+
+  async getUserByName(name: string): Promise<UserEntity> {
+    return await this.usersRepository.getUserByName(name);
+  }
+  
 }

@@ -36,4 +36,8 @@ export class UserRepository {
   deleteUser(id: string): Promise<DeleteResult> {
     return this.usersRepository.delete(id);
   }
+
+  getUserByName(name: string): Promise<UserEntity> {
+    return this.usersRepository.findOne({ where: { name: name } });
+  }
 }

@@ -14,9 +14,14 @@ export class UserDto {
   @ApiProperty()
   lastName: string;
 
-  constructor(id: string, name: string, lastName: string) {
+  @IsString()
+  @ApiProperty()
+  password: string;
+
+  constructor(id: string, name: string, lastName: string, password: string) {
     this.id = id;
     this.name = name;
     this.lastName = lastName;
+    this.password = password;
   }
 }
